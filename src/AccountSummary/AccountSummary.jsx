@@ -1,0 +1,18 @@
+import { PriceContext } from "../PriceContext";
+import { useContext } from "react";
+
+const AccountSummary = ({ orderCounter, coinCounter, budget }) => {
+
+    const currentPrice = useContext(PriceContext).currentPrice;
+    
+    return (
+        <div style={{ display: 'flex', alignItems: 'center', flexDirection: 'column', margin: '24px' }}>
+            <div>Total orders: {orderCounter}</div>
+            <div>🪙{coinCounter}</div>
+            <div>💲{budget}</div>
+            <div>Current price: {currentPrice}</div>
+        </div>
+    )
+}
+
+export default AccountSummary
