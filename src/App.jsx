@@ -83,6 +83,10 @@ function App() {
   const [addressHistory, setAddressHistory] = useState([]);
 
   const [budget, setBudget] = useState(50000);
+  // a simplified case assuming we either are loading or not (not means finished succesfully)
+  const [isLoading, setIsLoading] = useState(false);
+  // when working with isLoading, usually it's used in collocation with
+  // hasStartedLoading / isFinished loading or smth like is isInitialLoad / isFirstLoad
 
   const [silverData, setSilverData] = useState({
     month: '',
@@ -95,9 +99,9 @@ function App() {
   useEffect(() => {
     const fetchSilverData = async function () {
       try {
-
+        setIsLoading(true);
         // register your bin at https://jsonbin.io and get your own bin URL and master key
-        const binUrl = "https://api.jsonbin.io/";
+        const binUrl = "https://api.jsonbin.io/v3/b/";
 
         const response = await fetch(binUrl, {
           method: 'GET',
@@ -109,6 +113,7 @@ function App() {
 
         const data = await response.json();
         setSilverData(data.record);
+        setIsLoading(false);
       }
       catch (error) {
         console.error('Error fetching silver data:', error);
@@ -138,6 +143,7 @@ function App() {
   return (
     <>
       <StrictMode>
+        {isLoading ? <p>Loading...</p> : <p>Your Component here</p>}
         <PriceContext value={contextValueObject}>
 
           <nav style={{ display: 'flex', flexDirection: "row", justifyContent: 'space-around' }}>
@@ -159,6 +165,7 @@ function App() {
                 setAddressHistory={setAddressHistory}
                 budget={budget}
                 setBudget={setBudget}
+                isLoading={isLoading}
               />
             } />
             <Route path="/order" element={
@@ -178,12 +185,13 @@ function App() {
                 orderCounter={orderCounter}
                 coinCounter={coinCounter}
                 budget={budget}
+                isLoading={isLoading}
             />
             } />
             <Route path="/history" element={
-              <AddressInfo addressHistory={addressHistory}/>
+              <AddressInfo addressHistory={addressHistory} isLoading={isLoading}/>
             }/>
-            <Route path="/chart" element={<SilverPriceChart />} />
+            <Route path="/chart" element={<SilverPriceChart isLoading={isLoading}/>} />
 
           </Routes>
         </PriceContext>

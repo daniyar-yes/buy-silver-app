@@ -4,7 +4,7 @@ import { PriceContext } from "./PriceContext";
 import { useContext } from "react";
 
 
-function MainContainer({ orderCounter, coinCounter, budget }) {
+function MainContainer({ orderCounter, coinCounter, budget, isLoading }) {
 
     const priceContextObj = useContext(PriceContext);
     const silverData = priceContextObj?.silverData;
@@ -25,9 +25,8 @@ function MainContainer({ orderCounter, coinCounter, budget }) {
                 coinCounter={coinCounter}
                 budget={budget}
             />
-
-            <div style={{display: 'flex', alignItems: 'center', flexDirection: 'column'}}>
-                <p>Advice: {recommendationMessage}</p>
+            <div style={{ display: 'flex', alignItems: 'center', flexDirection: 'column' }}>
+                {isLoading ? <p>Loading...</p> : <p>Advice: {recommendationMessage}</p>}
             </div>
         </>
     )
