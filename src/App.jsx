@@ -101,7 +101,7 @@ function App() {
       try {
         setIsLoading(true);
         // register your bin at https://jsonbin.io and get your own bin URL and master key
-        const binUrl = "https://api.jsonbin.io/v3/b/";
+        const binUrl = "https://api.jsonbin.io/v3/";
 
         const response = await fetch(binUrl, {
           method: 'GET',
@@ -143,7 +143,6 @@ function App() {
   return (
     <>
       <StrictMode>
-        {isLoading ? <p>Loading...</p> : <p>Your Component here</p>}
         <PriceContext value={contextValueObject}>
 
           <nav style={{ display: 'flex', flexDirection: "row", justifyContent: 'space-around' }}>

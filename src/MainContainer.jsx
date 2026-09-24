@@ -24,9 +24,10 @@ function MainContainer({ orderCounter, coinCounter, budget, isLoading }) {
                 orderCounter={orderCounter}
                 coinCounter={coinCounter}
                 budget={budget}
+                isLoading={isLoading}
             />
             <div style={{ display: 'flex', alignItems: 'center', flexDirection: 'column' }}>
-                {isLoading ? <p>Loading...</p> : <p>Advice: {recommendationMessage}</p>}
+                {isLoading ? 'Loading...' : <p>Advice: {recommendationMessage}</p>}
             </div>
         </>
     )

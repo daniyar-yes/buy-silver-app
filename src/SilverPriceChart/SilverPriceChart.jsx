@@ -59,16 +59,22 @@ const SilverPriceChart = ({isLoading}) => {
   useEffect(() => {
     const xAxis = select(xAxisRef.current);
     const yAxis = select(yAxisRef.current);
+    const zoomLayer = zoomLayerRef.current;
+
+    yAxis.call(axisLeft(yScale).ticks(6));
+
+    if (isLoading) {
+      return;
+    }
+
     const linePath = select(lineRef.current);
     const points = select(pointsRef.current).selectAll('circle').data(dataPoints);
-
     const updateChart = (currentXScale) => {
       xAxis.call(axisBottom(currentXScale).ticks(6));
       linePath.attr('d', line().x((point) => currentXScale(point.date)).y((point) => yScale(point.price))(dataPoints));
       points.attr('cx', (point) => currentXScale(point.date));
     };
 
-    yAxis.call(axisLeft(yScale).ticks(6));
     updateChart(xScale);
 
     const zoomBehavior = zoom()
@@ -77,12 +83,12 @@ const SilverPriceChart = ({isLoading}) => {
       .extent([[0, 0], [chartWidth, chartHeight]])
       .on('zoom', (event) => updateChart(event.transform.rescaleX(xScale)));
 
-    select(zoomLayerRef.current).call(zoomBehavior);
+    select(zoomLayer).call(zoomBehavior);
 
     return () => {
-      select(zoomLayerRef.current).on('.zoom', null);
+      select(zoomLayer).on('.zoom', null);
     };
-  }, [dataPoints, chartHeight, chartWidth, xScale, yScale]);
+  }, [dataPoints, chartHeight, chartWidth, isLoading, xScale, yScale]);
 
   return (
     <div>
@@ -93,13 +99,26 @@ const SilverPriceChart = ({isLoading}) => {
         <g transform={`translate(${margin.left}, ${margin.top})`}>
           <g ref={yAxisRef} />
           <g ref={xAxisRef} transform={`translate(0, ${chartHeight})`} />
-          <g opacity="0.15" ref={pointsRef}>
-            {dataPoints.map((point) => (
-              <circle key={point.date.toISOString()} cx={xScale(point.date)} cy={yScale(point.price)} r="4" fill="currentColor" />
-            ))}
-          </g>
-          <path ref={lineRef} d={createLine(dataPoints)} fill="none" stroke="currentColor" strokeWidth="2" />
-          <rect ref={zoomLayerRef} width={chartWidth} height={chartHeight} fill="transparent" />
+          {isLoading ? (
+            <text
+              x={chartWidth / 2}
+              y={chartHeight / 2}
+              textAnchor="middle"
+              dominantBaseline="middle"
+            >
+              Loading...
+            </text>
+          ) : (
+            <>
+              <g opacity="0.15" ref={pointsRef}>
+                {dataPoints.map((point) => (
+                  <circle key={point.date.toISOString()} cx={xScale(point.date)} cy={yScale(point.price)} r="4" fill="currentColor" />
+                ))}
+              </g>
+              <path ref={lineRef} d={createLine(dataPoints)} fill="none" stroke="currentColor" strokeWidth="2" />
+              <rect ref={zoomLayerRef} width={chartWidth} height={chartHeight} fill="transparent" />
+            </>
+          )}
         </g>
       </svg>
      
