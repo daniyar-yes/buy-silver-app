@@ -2,7 +2,7 @@ import { axisBottom, axisLeft, extent, line, scaleLinear, scaleTime, select, zoo
 import { useEffect, useRef, useContext } from 'react';
 import { PriceContext } from '../PriceContext';
 
-const SilverPriceChart = () => {
+const SilverPriceChart = ({isLoading}) => {
   const priceContextObject = useContext(PriceContext);
   const silverData = priceContextObject?.silverData;    
   
@@ -44,10 +44,12 @@ const SilverPriceChart = () => {
     .domain(dataPoints.length ? [
       new Date(dateExtent[0].getTime() - datePadding * 0.05),
       new Date(dateExtent[1].getTime() + datePadding * 0.05)
-    ] : [new Date('2026-08-01T00:00:00Z'), new Date('2026-08-31T00:00:00Z')])
+      // hard-coded, magic value numbers here - really bad anti-pattern, don't do this in production
+    ] : [new Date('2026-09-01T00:00:00Z'), new Date('2026-09-30T00:00:00Z')])
     .range([0, chartWidth]);
   const yScale = scaleLinear()
-    .domain(dataPoints.length ? [priceExtent[0] - pricePadding * 0.1, priceExtent[1] + pricePadding * 0.1] : [0, 1])
+  // hard-coded, magic value numbers here - really bad anti-pattern, don't do this in production
+    .domain(dataPoints.length ? [priceExtent[0] - pricePadding * 0.1, priceExtent[1] + pricePadding * 0.1] : [35, 70])
     .nice()
     .range([chartHeight, 0]);
   const createLine = line()
