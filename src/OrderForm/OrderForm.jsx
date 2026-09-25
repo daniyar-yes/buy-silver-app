@@ -11,7 +11,8 @@ const OrderForm = (
         setAddressHistory,
         setBudget,
         budget,
-        isDataReady
+        isDataReady,
+        isError
     }) => {
 
     const [counter, setCounter] = useState(0);
@@ -116,7 +117,7 @@ const OrderForm = (
                     </div>
                     <button onClick={submissionHandler} disabled={!isDataReady}>Submit</button>
                 </div>}
-
+                {isError && <p>Failed to load data</p>}
         </>
     )
 }

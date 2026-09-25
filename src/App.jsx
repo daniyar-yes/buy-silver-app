@@ -83,10 +83,12 @@ function App() {
   const [addressHistory, setAddressHistory] = useState([]);
 
   const [budget, setBudget] = useState(50000);
-  // a simplified case assuming we either are loading or not (not means finished succesfully)
+
   const [isLoading, setIsLoading] = useState(false);
-  // when working with isLoading, usually it's used in collocation with
-  // hasStartedLoading / isFinished loading or smth like is isInitialLoad / isFirstLoad
+  const [isDataReady, setIsDataReady] = useState(false);
+  const [isError, setIsError] = useState(false);
+
+
 
   const [silverData, setSilverData] = useState({
     month: '',
@@ -96,12 +98,12 @@ function App() {
     CTANeutral: ''
   });
 
-  const [isDataReady, setIsDataReady] = useState(false);
 
   useEffect(() => {
     const fetchSilverData = async function () {
       try {
         setIsLoading(true);
+        setIsError(false);
         // register your bin at https://jsonbin.io and get your own bin URL and master key
         const binUrl = "https://api.jsonbin.io/";
 
@@ -120,6 +122,7 @@ function App() {
       }
       catch (error) {
         console.error('Error fetching silver data:', error);
+        setIsError(true);
       }
     }
     fetchSilverData();
@@ -168,6 +171,7 @@ function App() {
                 budget={budget}
                 setBudget={setBudget}
                 isLoading={isLoading}
+                isError={isError}
               />
             } />
             <Route path="/order" element={
@@ -181,6 +185,7 @@ function App() {
                 setBudget={setBudget}
                 budget={budget}
                 isDataReady={isDataReady}
+                isError={isError}
               />
             } />
             <Route path="/account" element={
@@ -189,12 +194,13 @@ function App() {
                 coinCounter={coinCounter}
                 budget={budget}
                 isLoading={isLoading}
+                isError={isError}
             />
             } />
             <Route path="/history" element={
-              <AddressInfo addressHistory={addressHistory} isLoading={isLoading}/>
+              <AddressInfo addressHistory={addressHistory} isLoading={isLoading} isError={isError}/>
             }/>
-            <Route path="/chart" element={<SilverPriceChart isLoading={isLoading}/>} />
+            <Route path="/chart" element={<SilverPriceChart isLoading={isLoading} isError={isError}/>} />
 
           </Routes>
         </PriceContext>
