@@ -10,7 +10,8 @@ const OrderForm = (
         addressHistory,
         setAddressHistory,
         setBudget,
-        budget
+        budget,
+        isDataReady
     }) => {
 
     const [counter, setCounter] = useState(0);
@@ -103,17 +104,17 @@ const OrderForm = (
                     <div style={{ display: 'flex', flexDirection: 'column', minWidth: '100px' }}>
                         {/* placeholder counter */}
                         <div style={{ margin: 'auto' }}>{counter}</div>
-                        <button onClick={additionButtonHandler}>Buy silver coin</button>
-                        <button onClick={subtractionButtonHandler}>Sell silver coin</button>
+                        <button disabled={!isDataReady} onClick={additionButtonHandler}>Buy silver coin</button>
+                        <button disabled={!isDataReady} onClick={subtractionButtonHandler}>Sell silver coin</button>
                     </div>
                     <h3>Delivery address:</h3>
                     <div style={{ display: 'flex', flexDirection: 'column', minWidth: '100px' }}>
                         <div style={{ margin: 'auto' }}>{streetNumber}</div>
                         <div style={{ margin: 'auto' }}>{streetName}</div>
-                        <input type="text" id='street-name' onChange={(e) => setStreetName(e.target.value)}></input>
-                        <input type="number" id='street-number' onChange={(e) => setStreetNumber(e.target.value)}></input>
+                        <input disabled={!isDataReady} type="text" id='street-name' onChange={(e) => setStreetName(e.target.value)}></input>
+                        <input disabled={!isDataReady} type="number" id='street-number' onChange={(e) => setStreetNumber(e.target.value)}></input>
                     </div>
-                    <button onClick={submissionHandler}>Submit</button>
+                    <button onClick={submissionHandler} disabled={!isDataReady}>Submit</button>
                 </div>}
 
         </>

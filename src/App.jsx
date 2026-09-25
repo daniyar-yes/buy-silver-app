@@ -96,12 +96,14 @@ function App() {
     CTANeutral: ''
   });
 
+  const [isDataReady, setIsDataReady] = useState(false);
+
   useEffect(() => {
     const fetchSilverData = async function () {
       try {
         setIsLoading(true);
         // register your bin at https://jsonbin.io and get your own bin URL and master key
-        const binUrl = "https://api.jsonbin.io/v3/";
+        const binUrl = "https://api.jsonbin.io/";
 
         const response = await fetch(binUrl, {
           method: 'GET',
@@ -114,6 +116,7 @@ function App() {
         const data = await response.json();
         setSilverData(data.record);
         setIsLoading(false);
+        setIsDataReady(true)
       }
       catch (error) {
         console.error('Error fetching silver data:', error);
@@ -177,6 +180,7 @@ function App() {
                 setAddressHistory={setAddressHistory}
                 setBudget={setBudget}
                 budget={budget}
+                isDataReady={isDataReady}
               />
             } />
             <Route path="/account" element={
