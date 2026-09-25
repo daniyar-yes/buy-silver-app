@@ -1,3 +1,4 @@
+import LoadingSpinner from "../components/LoadingSpinner/LoadingSpinner";
 import { PriceContext } from "../PriceContext";
 import { useContext } from "react";
 
@@ -10,7 +11,7 @@ const AccountSummary = ({ orderCounter, coinCounter, budget, isLoading }) => {
             <div>Total orders: {orderCounter}</div>
             <div>🪙 {coinCounter}</div>
             <div>💲 {budget}</div>
-            {isLoading ? 'Loading...' : <div>Current price: ${currentPrice}</div>}
+            {isLoading ? <LoadingSpinner /> : <div>Current price: ${currentPrice}</div>}
         </div>
     )
 }

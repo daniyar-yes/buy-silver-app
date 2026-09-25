@@ -1,5 +1,6 @@
 import { useContext } from 'react'
 import { PriceContext } from '../PriceContext';
+import LoadingSpinner from '../components/LoadingSpinner/LoadingSpinner';
 
 const AddressInfo = ({ addressHistory, isLoading }) => {
     const todaysPrice = useContext(PriceContext).currentPrice;
@@ -7,7 +8,7 @@ const AddressInfo = ({ addressHistory, isLoading }) => {
     const addressListItems = addressHistory.map(address => <li key={address.id}>{`${address.streetName} ${address.streetNumber}`}</li>);
     return (
         <div style={{ display: 'flex', alignItems: 'center', flexDirection: 'column', margin: '24px' }}>
-        {isLoading ? 'Loading...' : `Today's price is:  $${todaysPrice}`}
+        {isLoading ? <LoadingSpinner />: `Today's price is:  $${todaysPrice}`}
             <ul>{!!addressHistory.length && addressListItems}</ul>
             </div>
 

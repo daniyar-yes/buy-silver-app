@@ -1,5 +1,6 @@
 // React component: is a JavaScript function, that takes exactly one input ('{props}') and returns 
 import AccountSummary from "./AccountSummary/AccountSummary";
+import LoadingSpinner from "./components/LoadingSpinner/LoadingSpinner";
 import { PriceContext } from "./PriceContext";
 import { useContext } from "react";
 
@@ -27,7 +28,7 @@ function MainContainer({ orderCounter, coinCounter, budget, isLoading }) {
                 isLoading={isLoading}
             />
             <div style={{ display: 'flex', alignItems: 'center', flexDirection: 'column' }}>
-                {isLoading ? 'Loading...' : <p>Advice: {recommendationMessage}</p>}
+                {isLoading ? <LoadingSpinner /> : <p>Advice: {recommendationMessage}</p>}
             </div>
         </>
     )
