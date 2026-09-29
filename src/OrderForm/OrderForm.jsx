@@ -35,7 +35,6 @@ const OrderForm = (
             streetNameValue: streetName,
             streetNumberValue: streetNumber
         })
-        console.log('from streetName useEffect', JSON.stringify(finalFormData))
 
     }, [streetName, streetNumber, counter]);
 
@@ -61,21 +60,12 @@ const OrderForm = (
             setStreetNumber(null);
         }
 
-        // setAddressHistory([{streetName: streetName, streetNumber: streetNumber}])
-
-        console.log('Address-DEBUG', addressHistory)
-
-        console.log('From isOrderComplete useEffect', JSON.stringify(finalFormData))
-
     }, [isOrderComplete])
 
 
     function additionButtonHandler() {
         setCounter(counter + 1)
     };
-
-    console.log('re-rendered', `value of street name is ${streetName}`)
-
 
     function subtractionButtonHandler() {
         setCounter(counter - 1)

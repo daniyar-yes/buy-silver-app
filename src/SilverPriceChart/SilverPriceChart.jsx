@@ -2,7 +2,8 @@ import { axisBottom, axisLeft, extent, line, scaleLinear, scaleTime, select, zoo
 import { useEffect, useRef, useContext } from 'react';
 import { PriceContext } from '../PriceContext';
 
-const SilverPriceChart = ({isLoading}) => {
+// add error handling case and use the prop
+const SilverPriceChart = ({isLoading, isError}) => {
   const priceContextObject = useContext(PriceContext);
   const silverData = priceContextObject?.silverData;    
   

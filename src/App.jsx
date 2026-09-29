@@ -80,7 +80,13 @@ function App() {
 
   const [orderCounter, setOrderCounter] = useState(0);
   const [coinCounter, setCoinCounter] = useState(0);
-  const [addressHistory, setAddressHistory] = useState([]);
+  const [addressHistory, setAddressHistory] = useState([
+    { streetName: 'First Street', streetNumber: 1, id: crypto.randomUUID() },
+    { streetName: 'Second Road', streetNumber: 2, id: crypto.randomUUID() },
+    { streetName: '3rd avenue', streetNumber: 3, id: crypto.randomUUID() },
+    { streetName: 'Fourth forrest lane', streetNumber: 4, id: crypto.randomUUID() },
+    { streetName: '5th forrest street', streetNumber: 4, id: crypto.randomUUID() },
+  ]);
 
   const [budget, setBudget] = useState(50000);
 
@@ -105,7 +111,7 @@ function App() {
         setIsLoading(true);
         setIsError(false);
         // register your bin at https://jsonbin.io and get your own bin URL and master key
-        const binUrl = "https://api.jsonbin.io/";
+        const binUrl = "https://api.jsonbin.io/v3/";
 
         const response = await fetch(binUrl, {
           method: 'GET',
@@ -163,13 +169,8 @@ function App() {
             <Route path="/" element={
               <MainContainer
                 orderCounter={orderCounter}
-                setOrderCounter={setOrderCounter}
                 coinCounter={coinCounter}
-                setCoinCounter={setCoinCounter}
-                addressHistory={addressHistory}
-                setAddressHistory={setAddressHistory}
                 budget={budget}
-                setBudget={setBudget}
                 isLoading={isLoading}
                 isError={isError}
               />

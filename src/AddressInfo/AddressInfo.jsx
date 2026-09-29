@@ -1,11 +1,33 @@
-import { useContext } from 'react'
+import { useContext, useState } from 'react'
 import { PriceContext } from '../PriceContext';
 import LoadingSpinner from '../components/LoadingSpinner/LoadingSpinner';
 
-const AddressInfo = ({ addressHistory, isLoading, isError }) => {
+const AddressInfo = ({ addressHistory = [], isLoading, isError }) => {
     const todaysPrice = useContext(PriceContext).currentPrice;
 
-    const addressListItems = addressHistory.map(address => <li key={address.id}>{`${address.streetName} ${address.streetNumber}`}</li>);
+
+    // In order to add a search of the list items
+    // we can take the array from addressHistory prop:
+
+    // [
+    //     { streetName: 'First Street', streetNumber: 1, id: crypto.randomUUID() },
+    //     { streetName: 'Second Road', streetNumber: 2, id: crypto.randomUUID() },
+    //     { streetName: '3rd avenue', streetNumber: 3, id: crypto.randomUUID() },
+    //     { streetName: 'Fourth forrest lane', streetNumber: 4, id: crypto.randomUUID() },
+    // ]
+
+    // and we can filter it before passing to `addressListItems`
+        
+    // i.e. first .FILTER() -> then .MAP()
+    // initially, filter is empty
+    // then filter is the current value of the input field
+    
+    const [searchFilter, setSearchFilter] = useState('');
+    const filteredAddressHistory = addressHistory.filter(address =>
+        address.streetName.toLowerCase().includes(searchFilter.toLowerCase())
+    );
+
+    const addressListItems = filteredAddressHistory.map(address => <li key={address.id}>{`${address.streetName} ${address.streetNumber}`}</li>);
     return (
         <div style={{ display: 'flex', alignItems: 'center', flexDirection: 'column', margin: '24px' }}>
 
@@ -15,6 +37,8 @@ const AddressInfo = ({ addressHistory, isLoading, isError }) => {
                 :
                 isLoading ? <LoadingSpinner /> : `Today's price is:  $${todaysPrice}`
             }
+
+            <input type="text" onChange={(e) => setSearchFilter(e.target.value)}></input>
             <ul>{!!addressHistory.length && addressListItems}</ul>
         </div>
 
