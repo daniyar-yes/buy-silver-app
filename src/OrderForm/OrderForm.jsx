@@ -8,7 +8,7 @@ const OrderForm = (
         coinCounter,
         setCoinCounter,
         addressHistory,
-        setAddressHistory,
+        setAddressPayload,
         setBudget,
         budget,
         isDataReady,
@@ -42,9 +42,9 @@ const OrderForm = (
         if (isOrderComplete === true) {
             setOrderCounter(c => c + 1);
             setCoinCounter(coinCounter + counter);
-            setAddressHistory(prevAddressHistory => 
+            setAddressPayload(
                                 [
-                                    ...prevAddressHistory,
+                                    ...addressHistory,
                                     { streetName: streetName, streetNumber: streetNumber, id: crypto.randomUUID() }
                                 ]
                             );

@@ -80,19 +80,16 @@ function App() {
 
   const [orderCounter, setOrderCounter] = useState(0);
   const [coinCounter, setCoinCounter] = useState(0);
-  const [addressHistory, setAddressHistory] = useState([
-    { streetName: 'First Street', streetNumber: 1, id: crypto.randomUUID() },
-    { streetName: 'Second Road', streetNumber: 2, id: crypto.randomUUID() },
-    { streetName: '3rd avenue', streetNumber: 3, id: crypto.randomUUID() },
-    { streetName: 'Fourth forrest lane', streetNumber: 4, id: crypto.randomUUID() },
-    { streetName: '5th forrest street', streetNumber: 4, id: crypto.randomUUID() },
-  ]);
+  const [addressHistory, setAddressHistory] = useState([]);
 
   const [budget, setBudget] = useState(50000);
 
   const [isLoading, setIsLoading] = useState(false);
   const [isDataReady, setIsDataReady] = useState(false);
   const [isError, setIsError] = useState(false);
+
+  const [addressPayload, setAddressPayload] = useState([]);
+  const [shouldUpdateAddress, setShouldUpdateAddress] = useState(false)
 
 
 
@@ -111,13 +108,13 @@ function App() {
         setIsLoading(true);
         setIsError(false);
         // register your bin at https://jsonbin.io and get your own bin URL and master key
-        const binUrl = "https://api.jsonbin.io/v3/";
+        const binUrl = "https://api.jsonbin.io/v3/b/6aa1fda1ac6210605aba699f";
 
         const response = await fetch(binUrl, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
-            'X-Access-Key': ''
+            'X-Access-Key': '$2a$10$ryiqyXipACVsZjH7PEsmqefh95gztaJB3UQT7m2vaLymK9BTD./2q'
           }
         });
 
@@ -133,6 +130,56 @@ function App() {
     }
     fetchSilverData();
   }, []);
+
+  useEffect(() => {
+    const fetchAddressData = async function () {
+      try {
+        const binUrl = 'https://api.jsonbin.io/';
+
+        const response = await fetch(binUrl, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-Access-Key': ''
+          }
+        });
+
+        const data = await response.json();
+        setAddressHistory(data.record.addressHistory)
+      }
+      catch (err) {
+        console.error(err)
+      }
+    }
+    fetchAddressData();
+  }, [])
+
+  useEffect(() => {
+    const updateAddressData = async function () {
+      try {
+        const binUrl = 'https://api.jsonbin.io/v3/b/6abef9a0ac6210605a0ac3d6';
+
+        const payload = {
+          addressHistory: addressPayload
+        }
+        const response = await fetch(binUrl, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-Access-Key': '$2a$10$qUTSTAdGxnA6jqRMSkX4QO16nkXujpzeieNoaLUNb8Yz4pOckuHd6'
+          },
+          body: JSON.stringify(payload)
+        });
+
+        const data = await response.json();
+        setAddressHistory(data.record.addressHistory)
+      }
+      catch (err) {
+        console.error(err)
+      }
+    }
+    if (addressPayload.length > 0) { updateAddressData() }
+  }, [addressPayload])
 
 
   const processedDataPoints = (Array.isArray(silverData.dataPoints) ? silverData.dataPoints : [])
@@ -182,7 +229,7 @@ function App() {
                 coinCounter={coinCounter}
                 setCoinCounter={setCoinCounter}
                 addressHistory={addressHistory}
-                setAddressHistory={setAddressHistory}
+                setAddressPayload={setAddressPayload}
                 setBudget={setBudget}
                 budget={budget}
                 isDataReady={isDataReady}
@@ -190,20 +237,21 @@ function App() {
               />
             } />
             <Route path="/account" element={
-               <AccountSummary
+              <AccountSummary
                 orderCounter={orderCounter}
                 coinCounter={coinCounter}
                 budget={budget}
                 isLoading={isLoading}
                 isError={isError}
-            />
+              />
             } />
             <Route path="/history" element={
-              <AddressInfo addressHistory={addressHistory} isLoading={isLoading} isError={isError}/>
-            }/>
-            <Route path="/chart" element={<SilverPriceChart isLoading={isLoading} isError={isError}/>} />
+              <AddressInfo addressHistory={addressHistory} isLoading={isLoading} isError={isError} />
+            } />
+            <Route path="/chart" element={<SilverPriceChart isLoading={isLoading} isError={isError} />} />
 
           </Routes>
+
         </PriceContext>
       </StrictMode >
     </>
