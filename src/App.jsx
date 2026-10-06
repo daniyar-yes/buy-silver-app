@@ -6,6 +6,7 @@ import OrderForm from "./OrderForm/OrderForm";
 import AccountSummary from "./AccountSummary/AccountSummary";
 import SilverPriceChart from "./SilverPriceChart/SilverPriceChart";
 import AddressInfo from "./AddressInfo/AddressInfo"
+import DrawingTool from "./DrawingTool/DrawingTool";
 // What lives where?
 // useState states:
 // App - all the global states: orderCounter, coinCounter, addressHistory, budget, currentPrice
@@ -210,6 +211,7 @@ function App() {
             <NavLink to="/account">Account Summary</NavLink>
             <NavLink to="/history">Order History</NavLink>
             <NavLink to="/chart">Chart</NavLink>
+            <NavLink to="/draw">Draw</NavLink>
           </nav>
 
           <Routes>
@@ -249,6 +251,7 @@ function App() {
               <AddressInfo addressHistory={addressHistory} isLoading={isLoading} isError={isError} />
             } />
             <Route path="/chart" element={<SilverPriceChart isLoading={isLoading} isError={isError} />} />
+            <Route path="/draw" element={<DrawingTool />} />
 
           </Routes>
 
