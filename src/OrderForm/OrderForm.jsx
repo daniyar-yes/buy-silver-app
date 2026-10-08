@@ -21,8 +21,9 @@ const OrderForm = (
     const [streetNumber, setStreetNumber] = useState(null);
     const [finalFormData, setFinalFormData] = useState({});
     const [isOrderComplete, setIsOrderComplete] = useState(false);
-    const [isSignatureComplete, setIsSignatureComplete] = useState(false);
     const [shouldShowSignatureForm, setShouldShowSignatureForm] = useState(false);
+    const [imgSrcFromCanvas, setImgSrcFromCanvas] = useState('')
+
 
     const price = useContext(PriceContext).currentPrice;
 
@@ -48,7 +49,12 @@ const OrderForm = (
             setAddressPayload(
                 [
                     ...addressHistory,
-                    { streetName: streetName, streetNumber: streetNumber, id: crypto.randomUUID() }
+                    {
+                        streetName: streetName,
+                        streetNumber: streetNumber,
+                        id: crypto.randomUUID(),
+                        imgSrcDataURL: imgSrcFromCanvas,
+                    }
                 ]
             );
             setBudget(budget - price * counter);
@@ -110,7 +116,7 @@ const OrderForm = (
                 <div>
                     <h4>Order complete</h4>
                     <p>You have ordered {counter} pieces of silver. Delivered to {streetNumber} {streetName} in 3 business days</p>
-                    <button onClick={() => {setIsOrderComplete(!isOrderComplete); setShouldShowSignatureForm(!shouldShowSignatureForm)}}>Order again</button>
+                    <button onClick={() => { setIsOrderComplete(!isOrderComplete); setShouldShowSignatureForm(!shouldShowSignatureForm) }}>Order again</button>
 
                     <h6>Saved Address History:</h6>
                     <ul>{addressHistory.length && addressListItems}</ul>
@@ -118,7 +124,11 @@ const OrderForm = (
                 :
                 shouldShowSignatureForm
                     ?
-                    <SignatureForm setIsOrderComplete={setIsOrderComplete} />
+                    <SignatureForm
+                        setIsOrderComplete={setIsOrderComplete}
+                        imgSrcFromCanvas={imgSrcFromCanvas}
+                        setImgSrcFromCanvas={setImgSrcFromCanvas}
+                    />
                     :
                     <div>
                         <div style={{ display: 'flex', flexDirection: 'column', minWidth: '100px' }}>

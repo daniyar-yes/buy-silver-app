@@ -1,9 +1,8 @@
 import { useRef, useEffect, useState } from 'react'
 
-const SignatureForm = ({ setIsOrderComplete }) => {
+const SignatureForm = ({ setIsOrderComplete, imgSrcFromCanvas, setImgSrcFromCanvas }) => {
 
     const [isDrawing, setIsDrawing] = useState(false);
-    const [imgSrcFromCanvas, setImgSrcFromCanvas] = useState('')
     // 1. Create a reference to hold the DOM node of the canvas
     const canvasRef = useRef(null);
 
