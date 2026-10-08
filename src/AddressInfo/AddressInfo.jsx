@@ -32,6 +32,7 @@ const AddressInfo = ({ addressHistory, isLoading, isError }) => {
 
                 <div key={`container-${address.id}`} style={{display: 'flex', flexDirection: "row"}}>
                     <li key={address.id}>{`${address.streetName} ${address.streetNumber}`}</li>
+                    <img width='50px' height='20px' key={`img-${address.id}`} src={address.imgSrcDataURL}/>
                     {/* <button key={`btn-delete-${address.id}` onClick={() => setAddressPayload(addressPayload.filter(this address id))}}>X</button> */}
                 </div>
 
