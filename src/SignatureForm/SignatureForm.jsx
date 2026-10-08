@@ -1,6 +1,6 @@
 import { useRef, useEffect, useState } from 'react'
 
-const DrawingTool = () => {
+const SignatureForm = ({ setIsOrderComplete }) => {
 
     const [isDrawing, setIsDrawing] = useState(false);
     const [imgSrcFromCanvas, setImgSrcFromCanvas] = useState('')
@@ -71,6 +71,7 @@ const DrawingTool = () => {
 
     return (
         <>
+        <button onClick={() => setIsOrderComplete(true)}>Confirm Order</button>
             <canvas
                 ref={canvasRef}
                 style={{ border: '3px solid black' }}
@@ -99,4 +100,4 @@ const DrawingTool = () => {
     )
 }
 
-export default DrawingTool
+export default SignatureForm

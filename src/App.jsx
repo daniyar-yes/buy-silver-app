@@ -1,12 +1,13 @@
 import MainContainer from "./MainContainer";
 import { StrictMode, useState, useEffect } from "react";
 import { PriceContext } from "./PriceContext";
+// I personally count react-router as a must have but it's not a must from React's creators
 import { NavLink, Route, Routes } from "react-router";
 import OrderForm from "./OrderForm/OrderForm";
 import AccountSummary from "./AccountSummary/AccountSummary";
 import SilverPriceChart from "./SilverPriceChart/SilverPriceChart";
 import AddressInfo from "./AddressInfo/AddressInfo"
-import DrawingTool from "./DrawingTool/DrawingTool";
+import SignatureForm from "./SignatureForm/SignatureForm";
 // What lives where?
 // useState states:
 // App - all the global states: orderCounter, coinCounter, addressHistory, budget, currentPrice
@@ -109,13 +110,13 @@ function App() {
         setIsLoading(true);
         setIsError(false);
         // register your bin at https://jsonbin.io and get your own bin URL and master key
-        const binUrl = "https://api.jsonbin.io/v3/b/6aa1fda1ac6210605aba699f";
+        const binUrl = "https://api.jsonbin.io/";
 
         const response = await fetch(binUrl, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
-            'X-Access-Key': '$2a$10$ryiqyXipACVsZjH7PEsmqefh95gztaJB3UQT7m2vaLymK9BTD./2q'
+            'X-Access-Key': ''
           }
         });
 
@@ -135,13 +136,13 @@ function App() {
   useEffect(() => {
     const fetchAddressData = async function () {
       try {
-        const binUrl = 'https://api.jsonbin.io/';
+        const binUrl = 'https://api.jsonbin.io/v3/b/6abef9a0ac6210605a0ac3d6';
 
         const response = await fetch(binUrl, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
-            'X-Access-Key': ''
+            'X-Access-Key': '$2a$10$qUTSTAdGxnA6jqRMSkX4QO16nkXujpzeieNoaLUNb8Yz4pOckuHd6'
           }
         });
 
@@ -211,7 +212,6 @@ function App() {
             <NavLink to="/account">Account Summary</NavLink>
             <NavLink to="/history">Order History</NavLink>
             <NavLink to="/chart">Chart</NavLink>
-            <NavLink to="/draw">Draw</NavLink>
           </nav>
 
           <Routes>
@@ -251,7 +251,6 @@ function App() {
               <AddressInfo addressHistory={addressHistory} isLoading={isLoading} isError={isError} />
             } />
             <Route path="/chart" element={<SilverPriceChart isLoading={isLoading} isError={isError} />} />
-            <Route path="/draw" element={<DrawingTool />} />
 
           </Routes>
 

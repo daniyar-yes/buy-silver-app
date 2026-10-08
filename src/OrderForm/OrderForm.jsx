@@ -1,5 +1,6 @@
 import { useState, useEffect, useContext } from 'react';
 import { PriceContext } from '../PriceContext';
+import SignatureForm from '../SignatureForm/SignatureForm';
 
 const OrderForm = (
     {
@@ -20,6 +21,8 @@ const OrderForm = (
     const [streetNumber, setStreetNumber] = useState(null);
     const [finalFormData, setFinalFormData] = useState({});
     const [isOrderComplete, setIsOrderComplete] = useState(false);
+    const [isSignatureComplete, setIsSignatureComplete] = useState(false);
+    const [shouldShowSignatureForm, setShouldShowSignatureForm] = useState(false);
 
     const price = useContext(PriceContext).currentPrice;
 
@@ -43,11 +46,11 @@ const OrderForm = (
             setOrderCounter(c => c + 1);
             setCoinCounter(coinCounter + counter);
             setAddressPayload(
-                                [
-                                    ...addressHistory,
-                                    { streetName: streetName, streetNumber: streetNumber, id: crypto.randomUUID() }
-                                ]
-                            );
+                [
+                    ...addressHistory,
+                    { streetName: streetName, streetNumber: streetNumber, id: crypto.randomUUID() }
+                ]
+            );
             setBudget(budget - price * counter);
             return
         }; // safeguard from resetting values when order is complete
@@ -72,11 +75,33 @@ const OrderForm = (
     };
 
     function submissionHandler() {
-        setIsOrderComplete(!isOrderComplete)
+        setShouldShowSignatureForm(true)
     }
-//  { streetName: streetName, streetNumber: streetNumber, id: crypto.randomUUID() }
-    const addressListItems = addressHistory.map(address => <li key={address.id}>{`${address.streetName} ${address.streetNumber}` }</li>);
+
+
+    //     function submissionHandler() {
+    //     setIsOrderComplete(!isOrderComplete)
+    // }
+    //  { streetName: streetName, streetNumber: streetNumber, id: crypto.randomUUID() }
+    const addressListItems = addressHistory.map(address => <li key={address.id}>{`${address.streetName} ${address.streetNumber}`}</li>);
     // condition ? outcome : fallback
+
+    // Given:
+    // existing logic for conditional rendering:
+    // if order is complete, show success message UI
+    // else show the counters, text inputs, and submit button
+
+    // what I need to add:
+    // render DrawingTool from a correct place in terms of steps on screen
+    // after the user hits submit (for address), but before sending the 
+    // address data to the BE, being like last verification step before
+    // completing the order, and before showing the final success message
+
+    // show the success message when the user clicks on the confirm signature button
+    // from SignatureForm component
+    // this requires passing down the setter as a prop
+
+
     return (
         <>
             <h4>Place your order:</h4>
@@ -85,29 +110,34 @@ const OrderForm = (
                 <div>
                     <h4>Order complete</h4>
                     <p>You have ordered {counter} pieces of silver. Delivered to {streetNumber} {streetName} in 3 business days</p>
-                    <button onClick={() => setIsOrderComplete(!isOrderComplete)}>Order again</button>
+                    <button onClick={() => {setIsOrderComplete(!isOrderComplete); setShouldShowSignatureForm(!shouldShowSignatureForm)}}>Order again</button>
 
                     <h6>Saved Address History:</h6>
                     <ul>{addressHistory.length && addressListItems}</ul>
                 </div>
                 :
-                <div>
-                    <div style={{ display: 'flex', flexDirection: 'column', minWidth: '100px' }}>
-                        {/* placeholder counter */}
-                        <div style={{ margin: 'auto' }}>{counter}</div>
-                        <button disabled={!isDataReady} onClick={additionButtonHandler}>Buy silver coin</button>
-                        <button disabled={!isDataReady} onClick={subtractionButtonHandler}>Sell silver coin</button>
+                shouldShowSignatureForm
+                    ?
+                    <SignatureForm setIsOrderComplete={setIsOrderComplete} />
+                    :
+                    <div>
+                        <div style={{ display: 'flex', flexDirection: 'column', minWidth: '100px' }}>
+                            {/* placeholder counter */}
+                            <div style={{ margin: 'auto' }}>{counter}</div>
+                            <button disabled={!isDataReady} onClick={additionButtonHandler}>Buy silver coin</button>
+                            <button disabled={!isDataReady} onClick={subtractionButtonHandler}>Sell silver coin</button>
+                        </div>
+                        <h3>Delivery address:</h3>
+                        <div style={{ display: 'flex', flexDirection: 'column', minWidth: '100px' }}>
+                            <div style={{ margin: 'auto' }}>{streetNumber}</div>
+                            <div style={{ margin: 'auto' }}>{streetName}</div>
+                            <input disabled={!isDataReady} type="text" id='street-name' onChange={(e) => setStreetName(e.target.value)}></input>
+                            <input disabled={!isDataReady} type="number" id='street-number' onChange={(e) => setStreetNumber(e.target.value)}></input>
+                        </div>
+                        <button onClick={submissionHandler} disabled={!isDataReady}>Submit</button>
                     </div>
-                    <h3>Delivery address:</h3>
-                    <div style={{ display: 'flex', flexDirection: 'column', minWidth: '100px' }}>
-                        <div style={{ margin: 'auto' }}>{streetNumber}</div>
-                        <div style={{ margin: 'auto' }}>{streetName}</div>
-                        <input disabled={!isDataReady} type="text" id='street-name' onChange={(e) => setStreetName(e.target.value)}></input>
-                        <input disabled={!isDataReady} type="number" id='street-number' onChange={(e) => setStreetNumber(e.target.value)}></input>
-                    </div>
-                    <button onClick={submissionHandler} disabled={!isDataReady}>Submit</button>
-                </div>}
-                {isError && <p>Failed to load data</p>}
+            }
+            {isError && <p>Failed to load data</p>}
         </>
     )
 }
