@@ -43,9 +43,9 @@ const OrderForm = (
     }, [streetName, streetNumber, counter]);
 
     useEffect(() => {
+        setOrderCounter(c => c + 1);
+        setCoinCounter(coinCounter + counter);
         if (isOrderComplete === true) {
-            setOrderCounter(c => c + 1);
-            setCoinCounter(coinCounter + counter);
             setAddressPayload(
                 [
                     ...addressHistory,
@@ -54,6 +54,8 @@ const OrderForm = (
                         streetNumber: streetNumber,
                         id: crypto.randomUUID(),
                         imgSrcDataURL: imgSrcFromCanvas,
+                        numberOfPieces: coinCounter,
+                        totalCostPerOrder: coinCounter * price
                     }
                 ]
             );
@@ -69,7 +71,7 @@ const OrderForm = (
             setStreetNumber(null);
         }
 
-    }, [isOrderComplete])
+    }, [isOrderComplete, shouldShowSignatureForm]);
 
 
     function additionButtonHandler() {
@@ -89,7 +91,12 @@ const OrderForm = (
     //     setIsOrderComplete(!isOrderComplete)
     // }
     //  { streetName: streetName, streetNumber: streetNumber, id: crypto.randomUUID() }
-    const addressListItems = addressHistory.map(address => <li key={address.id}>{`${address.streetName} ${address.streetNumber}`}</li>);
+    const addressListItems = addressHistory.map(address =>
+    (<div style={{ display: 'flex', flexDirection: "row" }}>
+        <li key={address.id}>{`${address.streetName} ${address.streetNumber}`}</li>
+        {address.imgSrcDataURL && <img width='50px' height='20px' key={`img-${address.id}`} src={address.imgSrcDataURL} />}
+    </div>
+    ));
     // condition ? outcome : fallback
 
     // Given:

@@ -29,16 +29,16 @@ const AddressInfo = ({ addressHistory, isLoading, isError }) => {
 
     const addressListItems = filteredAddressHistory.map(address => {
         return (
-
                 <div key={`container-${address.id}`} style={{display: 'flex', flexDirection: "row"}}>
                     <li key={address.id}>{`${address.streetName} ${address.streetNumber}`}</li>
-                    <img width='50px' height='20px' key={`img-${address.id}`} src={address.imgSrcDataURL}/>
+                    {address.imgSrcDataURL && <img width='50px' height='20px' key={`img-${address.id}`} src={address.imgSrcDataURL}/>}
                     {/* <button key={`btn-delete-${address.id}` onClick={() => setAddressPayload(addressPayload.filter(this address id))}}>X</button> */}
                 </div>
-
         )
     }
     );
+
+    
     return (
         <div style={{ display: 'flex', alignItems: 'center', flexDirection: 'column', margin: '24px' }}>
 
@@ -48,7 +48,7 @@ const AddressInfo = ({ addressHistory, isLoading, isError }) => {
                 :
                 isLoading ? <LoadingSpinner /> : `Today's price is:  $${todaysPrice}`
             }
-
+            <span>Search</span>
             <input type="text" onChange={(e) => setSearchFilter(e.target.value)}></input>
             <ul>{!!addressHistory.length && addressListItems}</ul>
         </div>
