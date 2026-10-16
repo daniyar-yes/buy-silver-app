@@ -133,7 +133,7 @@ function App() {
   useEffect(() => {
     const fetchAddressData = async function () {
       try {
-        const binUrl = 'https://api.jsonbin.io/';
+        const binUrl = 'https://api.jsonbin.io';
 
         const response = await fetch(binUrl, {
           method: 'GET',
