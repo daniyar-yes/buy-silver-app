@@ -39,7 +39,7 @@ function MainContainer({
                     ? 
                     'Failed to load data' 
                     : 
-                        isLoading ? <LoadingSpinner /> : <p>Advice: {recommendationMessage}</p>
+                        isLoading ? <LoadingSpinner /> : <p data-testid="recommendation">Advice: {recommendationMessage}</p>
                 }
             </div>
         </>

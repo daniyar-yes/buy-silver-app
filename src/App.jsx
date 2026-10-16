@@ -7,7 +7,7 @@ import OrderForm from "./OrderForm/OrderForm";
 import AccountSummary from "./AccountSummary/AccountSummary";
 import SilverPriceChart from "./SilverPriceChart/SilverPriceChart";
 import AddressInfo from "./AddressInfo/AddressInfo"
-import SignatureForm from "./SignatureForm/SignatureForm";
+
 // What lives where?
 // useState states:
 // App - all the global states: orderCounter, coinCounter, addressHistory, budget, currentPrice
@@ -91,9 +91,6 @@ function App() {
   const [isError, setIsError] = useState(false);
 
   const [addressPayload, setAddressPayload] = useState([]);
-  const [shouldUpdateAddress, setShouldUpdateAddress] = useState(false)
-
-
 
   const [silverData, setSilverData] = useState({
     month: '',
@@ -110,13 +107,13 @@ function App() {
         setIsLoading(true);
         setIsError(false);
         // register your bin at https://jsonbin.io and get your own bin URL and master key
-        const binUrl = "https://api.jsonbin.io/";
+        const binUrl = "https://api.jsonbin.io/v3/b/6aa1fda1ac6210605aba699f";
 
         const response = await fetch(binUrl, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
-            'X-Access-Key': ''
+            'X-Access-Key': '$2a$10$ryiqyXipACVsZjH7PEsmqefh95gztaJB3UQT7m2vaLymK9BTD./2q'
           }
         });
 
@@ -136,13 +133,13 @@ function App() {
   useEffect(() => {
     const fetchAddressData = async function () {
       try {
-        const binUrl = 'https://api.jsonbin.io/v3/b/6abef9a0ac6210605a0ac3d6';
+        const binUrl = 'https://api.jsonbin.io/';
 
         const response = await fetch(binUrl, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
-            'X-Access-Key': '$2a$10$qUTSTAdGxnA6jqRMSkX4QO16nkXujpzeieNoaLUNb8Yz4pOckuHd6'
+            'X-Access-Key': ''
           }
         });
 
@@ -206,7 +203,7 @@ function App() {
       <StrictMode>
         <PriceContext value={contextValueObject}>
 
-          <nav style={{ display: 'flex', flexDirection: "row", justifyContent: 'space-around' }}>
+          <nav className="app-nav" aria-label="Main navigation">
             <NavLink to="/">Home</NavLink>
             <NavLink to="/order">Place Order</NavLink>
             <NavLink to="/account">Account Summary</NavLink>
